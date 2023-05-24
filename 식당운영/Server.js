@@ -12,7 +12,7 @@ Server.prototype.servAsync = function () {
   return new Promise(function (resolve) {
     self.status = "serving"; // 요리 중 상태로 변경
     setTimeout(function () {
-      self.status = "ready"; // 요리가 완료되면 다시 available 상태로 변경
+      self.status = "ready"; // 요리가 완료되면 다시 ready 상태로 변경
       resolve();
     }, self.servtime);
   });
