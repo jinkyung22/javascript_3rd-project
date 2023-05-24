@@ -62,7 +62,11 @@ function renderCookings() {
   cookingsEl.innerHTML = "";
   cookings.forEach(function (cooking) {
     var liEl = document.createElement("li");
-    liEl.textContent = `${cooking.menu.orderNumber} (${cooking.menu.menu.name}) (${cooking.menu.menu.time}초) - ${cooking.chef.name} (${cooking.chef.status})`;
+    liEl.textContent = `${cooking.menu.orderNumber} 메뉴: (${
+      cooking.menu.menu.name
+    }) (${cooking.menu.menu.time / 1000}초) -요리사: ${cooking.chef.name} (${
+      cooking.chef.status
+    })`;
     cookingsEl.append(liEl);
   });
 }
@@ -73,7 +77,11 @@ function renderServings() {
   servingsEl.innerHTML = "";
   servings.forEach(function (serving) {
     var liEl = document.createElement("li");
-    liEl.textContent = `${serving.menu.orderNumber} (${serving.menu.menu.name}) (${serving.menu.menu.time}초) - ${serving.server.name} (${serving.server.status})`;
+    liEl.textContent = `${serving.menu.orderNumber} 메뉴: (${
+      serving.menu.menu.name
+    }) (${serving.menu.menu.time / 1000}초) -서버: ${serving.server.name} (${
+      serving.server.status
+    })`;
     servingsEl.append(liEl);
   });
 }
@@ -113,7 +121,7 @@ function findServer() {
       } else {
         reject("대기 중인 서버가 없습니다.");
       }
-    }, 1000);
+    }, 100);
   });
 }
 
@@ -129,12 +137,12 @@ function run(menu) {
   renderOrders();
 
   findChef()
+    // 대기 중인 요리사를 찾아서 해당 주문을 요리 목록에 추가하고 화면에 렌더링
     .then(function (chef) {
-      // 대기 중인 요리사를 찾아서 해당 주문을 요리 목록에 추가하고 화면에 렌더링
       cookings.push({ menu: order, chef: chef });
       renderCookings();
 
-      // 요리사에게 주문을 요리하도록 비동기 실행하고 결과를 반환
+      // 요리사한테 메뉴 요리하도록 넘김
       return chef.cookAsync(menu);
     })
     .then(function () {
@@ -182,11 +190,11 @@ document.getElementById("sundae").onclick = function () {
   //setTimeout넣기
   setTimeout(function () {
     run(new Menu("순댓국", 1000));
-  }, 0);
+  }, 100);
 };
 
 document.getElementById("haejang").onclick = function () {
   setTimeout(function () {
     run(new Menu("해장국", 2000));
-  }, 0);
+  }, 100);
 };
